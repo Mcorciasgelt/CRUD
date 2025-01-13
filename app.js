@@ -16,6 +16,36 @@ app.get("/usuarios", (req, res) => {
     res.json(usuarios);
 });
 
+app.post("/usuarios", (req, res) => {
+    const { nombre, edad, lugarProcedencia } = req.body;
+
+    if (!nombre || !edad || !lugarProcedencia) {
+        return res.status(400).json({ error: "Todos los campos son requeridos" });
+    }
+
+    const nuevoUsuario = {
+        id: usuarios.length + 1,
+        nombre : req.body.nombre,
+        edad : req.body.edad,
+        lugarProcedencia : req.body.lugarProcedencia
+    };
+
+    usuarios.push(nuevoUsuario);
+    res.redirect("/usuarios")
+});
+
+
+app.get("/usuarios/:nombre", (req, res) => {
+    const nombre  = req.params.nombre;
+
+    const usuario = usuarios.find(u => u.nombre === nombre);
+
+    if (!usuario) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    res.json(usuario);
+});
 
 
 const PORT = 3000;
